@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -18,14 +20,19 @@ class PermissionTableSeeder extends Seeder
            'role-create',
            'role-edit',
            'role-delete',
-           'product-list',
-           'product-create',
-           'product-edit',
-           'product-delete'
+           'users-list',
+           'users-create',
+           'users-edit',
+           'users-delete',
         ];
 
         foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
+             Permission::updateOrCreate(['name' => $permission]);
         }
+        $role = Role::where('id',1)->first();
+        $role->syncPermissions($permissions);
+        Artisan::call('cache:forget spatie.permission.cache');
+
+        Artisan::call('config:cache');
     }
 }

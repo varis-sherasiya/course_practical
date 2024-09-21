@@ -26,10 +26,12 @@
                     <div class="pull-left">
                         <h2></h2>
                     </div>
-                    <div class="pull-right">
-                        <a class="btn btn-success mb-2" href="{{ route('users.create') }}"><i class="fa fa-plus"></i> Create
-                            New User</a>
-                    </div>
+                    @can('users-create')
+                        <div class="pull-right">
+                            <a class="btn btn-success mb-2" href="{{ route('users.create') }}"><i class="fa fa-plus"></i> Create
+                                New User</a>
+                        </div>
+                    @endcan
                 </div>
             </div>
 
@@ -60,17 +62,22 @@
                             @endif
                         </td>
                         <td>
+
                             <a class="btn btn-info btn-sm" href="{{ route('users.show', $user->id) }}"><i
                                     class="fas fa-folder"></i> Show</a>
-                            <a class="btn btn-primary btn-sm" href="{{ route('users.edit', $user->id) }}"><i
-                                    class="fa-solid fas fa-pencil-alt"></i> Edit</a>
-                            <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
-                                @csrf
-                                @method('DELETE')
+                            @can('users-edit')
+                                <a class="btn btn-primary btn-sm" href="{{ route('users.edit', $user->id) }}"><i
+                                        class="fa-solid fas fa-pencil-alt"></i> Edit</a>
+                            @endcan
+                            @can('users-delete')
+                                <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
+                                    @csrf
+                                    @method('DELETE')
 
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                    Delete</button>
-                            </form>
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                        Delete</button>
+                                </form>
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

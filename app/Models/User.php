@@ -18,8 +18,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'personal_email',
         'email',
+        'phone_no',
+        'mobile_no',
+        'address',
+        'city_id',
+        'zip_code',
+        'role_id',
         'password',
     ];
 
@@ -32,7 +41,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    protected $append = [
+        'name'
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -44,5 +55,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function city()  {
+        return $this->belongsTo(City::class);
+    }
+
+    public function getNameAttribute()  {
+        return $this->first_name.' '.$this->last_name;
     }
 }
